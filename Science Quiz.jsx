@@ -432,12 +432,16 @@ h1, h2, h3, .serif { font-family: 'Crimson Pro', serif; }
 `;
 
 // ─── TERM RENDERER ────────────────────────────────────────────────────────────
-function Tx({ text, onTerm }) {
+function Tx({ text, onTerm, disabled }) {
   if (!text) return null;
   const parts = []; const re = /\[([^\]]+)\]/g; let last = 0, m;
   while ((m = re.exec(text)) !== null) { if (m.index > last) parts.push({ t: "txt", v: text.slice(last, m.index) }); parts.push({ t: "trm", v: m[1] }); last = m.index + m[0].length; }
   if (last < text.length) parts.push({ t: "txt", v: text.slice(last) });
-  return (<span>{parts.map((p, i) => p.t === "txt" ? <span key={i}>{p.v}</span> : <button key={i} className="btn" onClick={e => { e.stopPropagation(); onTerm(p.v); }} style={{ background: "rgba(251,191,36,.15)", border: "1px solid rgba(251,191,36,.4)", borderRadius: 4, padding: "1px 5px", color: "#fde68a", fontSize: "inherit", fontFamily: "inherit", fontWeight: 700, display: "inline", transform: "none" }}>{p.v}</button>)}</span>);
+  return (<span>{parts.map((p, i) => {
+    if (p.t === "txt") return <span key={i}>{p.v}</span>;
+    if (disabled) return <span key={i} style={{ background: "rgba(251,191,36,.06)", border: "1px solid rgba(251,191,36,.15)", borderRadius: 4, padding: "1px 5px", color: "#fde68a", fontWeight: 700, opacity: 0.6, cursor: "default" }}>{p.v}</span>;
+    return <button key={i} className="btn" onClick={e => { e.stopPropagation(); onTerm(p.v); }} style={{ background: "rgba(251,191,36,.15)", border: "1px solid rgba(251,191,36,.4)", borderRadius: 4, padding: "1px 5px", color: "#fde68a", fontSize: "inherit", fontFamily: "inherit", fontWeight: 700, display: "inline", transform: "none" }}>{p.v}</button>;
+  })}</span>);
 }
 
 // ─── GLOSSARY MODAL ───────────────────────────────────────────────────────────
@@ -1042,7 +1046,7 @@ function QuizScreen({ user, questions, onFinish }) {
           <div style={{ marginBottom: 18 }}>
             <p style={{ fontSize: "clamp(14px,2.5vw,17px)", fontWeight: 600, color: "#e2e8f0", lineHeight: 1.85 }}>
               <span style={{ fontFamily: "'Crimson Pro',serif", fontSize: "clamp(16px,3vw,20px)", fontWeight: 700, color: "#60a5fa", marginRight: 10 }}>{idx + 1}.</span>
-              <Tx text={q.q} onTerm={setActiveTerm} />
+              <Tx text={q.q} onTerm={setActiveTerm} disabled={!revealed} />
             </p>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 18 }}>
@@ -1057,7 +1061,7 @@ function QuizScreen({ user, questions, onFinish }) {
                 <button key={i} className="opt" onClick={() => !revealed && doAnswer(i)} disabled={revealed}
                   style={{ background: bg, border: `1px solid ${bd}`, borderRadius: 12, padding: "13px 16px", color: col, fontSize: "clamp(13px,2vw,15px)", fontFamily: "'Noto Sans Thai',serif", display: "flex", alignItems: "center", gap: 12 }}>
                   <span style={{ width: 26, height: 26, borderRadius: 7, background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, color: "#475569", flexShrink: 0 }}>{labels[i]}</span>
-                  <Tx text={opt} onTerm={setActiveTerm} />
+                  <Tx text={opt} onTerm={setActiveTerm} disabled={!revealed} />
                   {revealed && i === q.ans && <span style={{ marginLeft: "auto", fontSize: 16, flexShrink: 0 }}>✓</span>}
                   {revealed && i === selected && i !== q.ans && <span style={{ marginLeft: "auto", fontSize: 14, flexShrink: 0 }}>✗</span>}
                 </button>
@@ -1258,15 +1262,47 @@ export default function App() {
     setGenerating(true);
     setAnswers([]);
     try {
+      let fetchedQuestions;
       if (geminiKey) {
-        const aiQuestions = await generateQuizQuestions(geminiKey);
-        setQuestions(aiQuestions);
+        fetchedQuestions = await generateQuizQuestions(geminiKey);
       } else {
-        setQuestions(pick50());
+        fetchedQuestions = pick50();
       }
+
+      // Shuffle options (ก ข ค ง) for each question so it's not always the same letter
+      const randomizedQuestions = fetchedQuestions.map(q => {
+        // Create an array of objects linking the original option text and whether it was the correct answer
+        const optionsWithMeta = q.opts.map((opt, origIndex) => ({
+          text: opt,
+          isCorrect: origIndex === q.ans
+        }));
+
+        // Fisher-Yates shuffle
+        for (let i = optionsWithMeta.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [optionsWithMeta[i], optionsWithMeta[j]] = [optionsWithMeta[j], optionsWithMeta[i]];
+        }
+
+        // Map back to just text array and find the new correct answer index
+        const newOpts = optionsWithMeta.map(o => o.text);
+        const newAnsIndex = optionsWithMeta.findIndex(o => o.isCorrect);
+
+        return { ...q, opts: newOpts, ans: newAnsIndex };
+      });
+
+      setQuestions(randomizedQuestions);
     } catch (err) {
       console.warn("AI generation failed, using hardcoded questions:", err);
-      setQuestions(pick50());
+      // Also randomize fallback
+      const fallbackQuestions = pick50().map(q => {
+        const optionsWithMeta = q.opts.map((opt, origIndex) => ({ text: opt, isCorrect: origIndex === q.ans }));
+        for (let i = optionsWithMeta.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [optionsWithMeta[i], optionsWithMeta[j]] = [optionsWithMeta[j], optionsWithMeta[i]];
+        }
+        return { ...q, opts: optionsWithMeta.map(o => o.text), ans: optionsWithMeta.findIndex(o => o.isCorrect) };
+      });
+      setQuestions(fallbackQuestions);
     }
     setGenerating(false);
     setView("quiz");
