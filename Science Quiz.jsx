@@ -12,13 +12,13 @@ const API_MODEL = "claude-sonnet-4-20250514";
 // ⚠️ REPLACE with your Firebase project config from:
 //    Firebase Console → Project Settings → General → Your apps → Web config
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
-  projectId: "YOUR_PROJECT",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyDnHPvaNqmWOJ6AxenpR596nC5hznmuL6w",
+  authDomain: "science-quiz-24ee3.firebaseapp.com",
+  databaseURL: "https://science-quiz-24ee3-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "science-quiz-24ee3",
+  storageBucket: "science-quiz-24ee3.firebasestorage.app",
+  messagingSenderId: "448526164114",
+  appId: "1:448526164114:web:4d9a1c8fae411089e8064b"
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
@@ -276,38 +276,157 @@ async function generateQuizQuestions(apiKey) {
 
 // ─── CSS ──────────────────────────────────────────────────────────────────────
 const CSS = `
-@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700;800&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap');
-*{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;background:#0c1018;}
-body{font-family:'Noto Sans Thai','Crimson Pro',serif;color:white;-webkit-font-smoothing:antialiased;}
-::-webkit-scrollbar{width:3px;height:3px;}
-::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:99px;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes scaleIn{from{opacity:0;transform:scale(0.93)}to{opacity:1;transform:scale(1)}}
-@keyframes slideUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
-@keyframes pulse{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.15)}}
-@keyframes spin{to{transform:rotate(360deg)}}
-.fu{animation:fadeUp .4s ease both;}
-.fi{animation:fadeIn .3s ease both;}
-.si{animation:scaleIn .28s cubic-bezier(.34,1.5,.64,1) both;}
-.su{animation:slideUp .35s cubic-bezier(.22,1,.36,1) both;}
-.opt{transition:background .15s,transform .12s,border-color .15s;cursor:pointer;border:none;text-align:left;width:100%;min-height:52px;}
-.opt:not(:disabled):hover{background:rgba(255,255,255,0.06)!important;transform:translateX(4px);}
-.btn{transition:all .2s ease;cursor:pointer;border:none;min-height:44px;display:inline-flex;align-items:center;justify-content:center;}
-.btn:hover{filter:brightness(1.12);transform:translateY(-1px);}
-.btn:active{transform:scale(.97);}
-input,textarea{outline:none;-webkit-appearance:none;}
-input:focus{border-color:rgba(96,165,250,.6)!important;box-shadow:0 0 0 3px rgba(96,165,250,.1)!important;}
-.trow{transition:background .12s;cursor:pointer;}
-.trow:hover{background:rgba(255,255,255,0.03)!important;}
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700;800&family=Outfit:wght@300;400;500;600;700;800&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg-dark: #07090e;
+  --bg-surface: #0f141f;
+  --bg-surface-light: #161d2b;
+  --glass-bg: rgba(22, 29, 43, 0.4);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-glow: rgba(96, 165, 250, 0.15);
+  --primary: #3b82f6;
+  --primary-hover: #60a5fa;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dim: #475569;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;scrollbar-width:thin;scrollbar-color:var(--text-dim) transparent;}
+html,body{height:100%;background:var(--bg-dark);background-image:radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.05) 0%, transparent 40%);background-attachment:fixed;}
+body{font-family:'Outfit','Noto Sans Thai',sans-serif;color:var(--text-main);-webkit-font-smoothing:antialiased;line-height:1.6;}
+
+::-webkit-scrollbar{width:6px;height:6px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15);border-radius:10px;}
+::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,0.25);}
+
+/* Animations */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0;backdrop-filter:blur(0)}to{opacity:1;backdrop-filter:blur(16px)}}
+@keyframes scaleIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
+@keyframes pulseGlow{0%,100%{box-shadow:0 0 0 0 rgba(59,130,246,0.4)}50%{box-shadow:0 0 20px 0 rgba(59,130,246,0.6)}}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes floatX{0%,100%{transform:translateX(0)}50%{transform:translateX(8px)}}
+
+.fu{animation:fadeUp .6s cubic-bezier(0.16,1,0.3,1) both;}
+.fi{animation:fadeIn .5s ease both;}
+.si{animation:scaleIn .4s cubic-bezier(0.16,1,0.3,1) both;}
+.delay-1{animation-delay:0.1s;}.delay-2{animation-delay:0.2s;}.delay-3{animation-delay:0.3s;}
+
+/* Glassmorphism Cards */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+/* Modern Options */
+.opt{
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  transition: all 0.25s cubic-bezier(0.2,0.8,0.2,1);
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  min-height: 64px;
+  padding: 16px 20px;
+  color: var(--text-main);
+  font-size: 1.05rem;
+  letter-spacing: 0.01em;
+  position: relative;
+  overflow: hidden;
+}
+.opt::before {
+  content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent); transform: translateX(-100%); transition: transform 0.5s ease;
+}
+.opt:not(:disabled):hover{
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.15);
+  transform: translateY(-2px) translateX(4px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+.opt:not(:disabled):hover::before { transform: translateX(100%); }
+.opt:not(:disabled):active{ transform: translateY(1px) translateX(2px) scale(0.98); }
+
+/* Buttons */
+.btn{
+  transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+  cursor: pointer;
+  border: none;
+  border-radius: 14px;
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  position: relative;
+  overflow: hidden;
+}
+.btn::after {
+  content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 100%); opacity: 0; transition: opacity 0.3s;
+}
+.btn:hover::after { opacity: 1; }
+.btn:hover{ transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+.btn:active{ transform: scale(0.96) translateY(0); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+
+.btn-primary {
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  color: white;
+  box-shadow: 0 8px 20px rgba(59,130,246,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+.btn-primary:hover { box-shadow: 0 12px 28px rgba(59,130,246,0.4), inset 0 1px 0 rgba(255,255,255,0.3); }
+
+/* Inputs */
+input,textarea{
+  outline:none;
+  -webkit-appearance:none;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  background: rgba(0,0,0,0.2) !important;
+}
+input:focus{
+  border-color: var(--primary)!important;
+  background: rgba(15,20,31,0.8) !important;
+  box-shadow: 0 0 0 4px rgba(59,130,246,0.15), inset 0 2px 4px rgba(0,0,0,0.2)!important;
+  transform: translateY(-1px);
+}
+
+/* Elegant Table Rows */
+.trow{transition:all .2s ease;cursor:pointer;border-bottom: 1px solid rgba(255,255,255,0.03);}
+.trow:last-child { border-bottom: none; }
+.trow:hover{
+  background: rgba(255,255,255,0.04)!important;
+  transform: translateX(4px);
+  border-radius: 8px;
+}
+
+/* Typography Enhancements */
+h1, h2, h3, .serif { font-family: 'Crimson Pro', serif; }
+.gradient-text {
+  background: linear-gradient(135deg, #f8fafc 0%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* Layout Utilities */
 @media(max-width:639px){
   .hide-m{display:none!important;}
   .quiz-layout{flex-direction:column!important;}
   .sidebar-q{display:none!important;}
   .mgmt-grid{grid-template-columns:1fr!important;}
-  .dash-stats{grid-template-columns:repeat(2,1fr)!important;}
+  .dash-stats{grid-template-columns:1fr!important;gap:16px!important;}
   .topic-bars{grid-template-columns:1fr!important;}
+  .glass-panel{padding:20px!important;border-radius:20px;}
 }
 @media(min-width:768px){.quiz-layout{flex-direction:row!important;}}
 `;
@@ -374,33 +493,31 @@ function LoginScreen({ onLogin }) {
   };
 
   return (
-    <div style={{ minHeight: "100dvh", background: "#0c1018", display: "flex", alignItems: "center", justifyContent: "center", padding: 24, fontFamily: "'Noto Sans Thai','Crimson Pro',serif", color: "white" }}>
+    <div style={{ minHeight: "100dvh", background: "var(--bg-dark)", display: "flex", alignItems: "center", justifyContent: "center", padding: 24, fontFamily: "'Outfit','Noto Sans Thai',serif", color: "white" }}>
       <style>{CSS}</style>
       <div style={{ position: "fixed", inset: 0, pointerEvents: "none" }}>
-        <div style={{ position: "absolute", top: "20%", left: "50%", transform: "translateX(-50%)", width: "min(600px,80vw)", height: "min(600px,80vw)", background: "radial-gradient(circle,rgba(96,165,250,.05) 0%,transparent 65%)", borderRadius: "50%" }} />
-        <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: .018 }}><defs><pattern id="g0" width="56" height="56" patternUnits="userSpaceOnUse"><path d="M56 0L0 0 0 56" fill="none" stroke="white" strokeWidth=".5" /></pattern></defs><rect width="100%" height="100%" fill="url(#g0)" /></svg>
+        <div style={{ position: "absolute", top: "15%", left: "50%", transform: "translateX(-50%)", width: "min(800px,100vw)", height: "min(800px,100vw)", background: "radial-gradient(circle,rgba(59,130,246,.08) 0%,rgba(168,85,247,.03) 40%,transparent 70%)", borderRadius: "50%", mixBlendMode: "screen" }} />
+        <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: .012 }}><defs><pattern id="g0" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0L0 0 0 40" fill="none" stroke="white" strokeWidth="1" /></pattern></defs><rect width="100%" height="100%" fill="url(#g0)" /></svg>
       </div>
-      <div className="fu" style={{ width: "100%", maxWidth: 400, position: "relative", zIndex: 1 }}>
-        <div style={{ textAlign: "center", marginBottom: 36 }}>
-          <div style={{ width: 68, height: 68, borderRadius: 20, background: "linear-gradient(135deg,rgba(96,165,250,.18),rgba(52,211,153,.18))", border: "1px solid rgba(96,165,250,.28)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 30, margin: "0 auto 18px" }}>🔬</div>
-          <h1 style={{ fontFamily: "'Crimson Pro',serif", fontSize: "clamp(24px,5vw,30px)", fontWeight: 700, color: "#f1f5f9", letterSpacing: "-.02em" }}>Science Quiz</h1>
-          <p style={{ color: "#334155", fontSize: 13, marginTop: 6 }}>ฟิสิกส์ · เคมี · ชีววิทยา</p>
+      <div className="fu" style={{ width: "100%", maxWidth: 420, position: "relative", zIndex: 1, animationDuration: "0.8s" }}>
+        <div style={{ textAlign: "center", marginBottom: 40, animation: "floatY 6s ease-in-out infinite" }}>
+          <div style={{ width: 72, height: 72, borderRadius: 22, background: "linear-gradient(135deg,rgba(59,130,246,.2),rgba(168,85,247,.2))", border: "1px solid rgba(59,130,246,.3)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 32, margin: "0 auto 20px", boxShadow: "0 0 30px rgba(59,130,246,0.15), inset 0 2px 10px rgba(255,255,255,0.1)" }}>🔬</div>
+          <h1 className="gradient-text" style={{ fontSize: "clamp(26px,6vw,34px)", fontWeight: 800, letterSpacing: "-.02em" }}>Science Quiz</h1>
+          <p style={{ color: "var(--text-muted)", fontSize: 14, marginTop: 8, letterSpacing: "0.05em", textTransform: "uppercase", fontWeight: 600 }}>ฟิสิกส์ · เคมี · ชีววิทยา</p>
         </div>
-        <div style={{ background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.08)", borderRadius: 22, padding: "28px 28px 24px" }}>
-          <div style={{ marginBottom: 14 }}>
-            <label style={{ fontSize: 10, color: "#475569", fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", display: "block", marginBottom: 8 }}>Member ID</label>
+        <div className="glass-panel" style={{ padding: "32px" }}>
+          <div style={{ marginBottom: 20 }}>
+            <label style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", display: "block", marginBottom: 10 }}>Member ID</label>
             <input value={id} onChange={e => { setId(e.target.value.toUpperCase()); setErr(""); }} onKeyDown={e => e.key === "Enter" && go()}
               placeholder="เช่น ST001 หรือรหัส Admin"
-              style={{ width: "100%", padding: "13px 16px", borderRadius: 12, background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.1)", color: "white", fontSize: 15, fontFamily: "'Noto Sans Thai',serif" }} />
+              style={{ width: "100%", padding: "16px 20px", borderRadius: 14, background: "rgba(0,0,0,0.2)", border: "1px solid rgba(255,255,255,.1)", color: "white", fontSize: 16, transition: "all 0.3s ease" }} />
           </div>
-          {err && <p style={{ color: "#f87171", fontSize: 12, marginBottom: 12 }}>⚠ {err}</p>}
-          <button className="btn" onClick={go} disabled={loading}
-            style={{ width: "100%", padding: "13px", borderRadius: 12, background: "linear-gradient(135deg,#3b82f6,#1d4ed8)", color: "white", fontSize: 15, fontWeight: 700, fontFamily: "'Noto Sans Thai',serif" }}>
+          {err && <div className="fi" style={{ background: "rgba(239,68,68,.1)", border: "1px solid rgba(239,68,68,.2)", color: "#fca5a5", fontSize: 13, padding: "10px 14px", borderRadius: 10, marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>⚠ {err}</div>}
+          <button className="btn btn-primary" onClick={go} disabled={loading} style={{ width: "100%", padding: "16px", fontSize: 16 }}>
             {loading ? "กำลังเข้าสู่ระบบ..." : "เข้าสู่ระบบ →"}
           </button>
-          <p style={{ textAlign: "center", color: "#334155", fontSize: 11, marginTop: 14, lineHeight: 1.6 }}>💡 ต้องได้รับ ID จาก Admin ก่อน</p>
+          <p style={{ textAlign: "center", color: "var(--text-dim)", fontSize: 12, marginTop: 20, fontWeight: 500 }}>💡 ต้องได้รับ ID จาก Admin ก่อน</p>
         </div>
-        <p style={{ textAlign: "center", color: "#1e293b", fontSize: 11, marginTop: 16 }}>Science Quiz · ฟิสิกส์ เคมี ชีววิทยา</p>
       </div>
     </div>
   );
@@ -475,9 +592,6 @@ function AdminDashboard({ onLogout }) {
     </th>
   );
 
-  // Unique members
-  const members = [...new Map(scores.map(s => [s.id, { id: s.id, name: s.name, scores: scores.filter(r => r.id === s.id) }])).values()];
-
   return (
     <div style={{ minHeight: "100vh", background: "#0c1018", fontFamily: "'Noto Sans Thai','Crimson Pro',serif", color: "white" }}>
       <style>{CSS}</style>
@@ -494,7 +608,7 @@ function AdminDashboard({ onLogout }) {
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "clamp(14px,3vw,32px)" }}>
         {/* Stats */}
         <div className="fu dash-stats" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 12, marginBottom: 20 }}>
-          {[["👤", members.length, "Members", "#60a5fa"], ["📋", scores.length, "ครั้งทำแบบทดสอบ", "#34d399"], ["%", overallAvg != null ? overallAvg + "%" : "—", "คะแนนเฉลี่ย", "#fbbf24"], ["🔥", scores.filter(s => s.pct >= 80).length, "ครั้งที่ได้≥80%", "#f472b6"]].map(([icon, val, label, color]) => (
+          {[["👤", acctList.length, "Members", "#60a5fa"], ["📋", scores.length, "ครั้งทำแบบทดสอบ", "#34d399"], ["%", overallAvg != null ? overallAvg + "%" : "—", "คะแนนเฉลี่ย", "#fbbf24"], ["🔥", scores.filter(s => s.pct >= 80).length, "ครั้งที่ได้≥80%", "#f472b6"]].map(([icon, val, label, color]) => (
             <div key={label} style={{ background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.07)", borderRadius: 14, padding: "16px clamp(12px,3vw,20px)" }}>
               <div style={{ fontSize: 11, color: "#334155", fontWeight: 600, letterSpacing: ".05em", textTransform: "uppercase", marginBottom: 8 }}>{icon} {label}</div>
               <div style={{ fontFamily: "'Crimson Pro',serif", fontSize: "clamp(24px,4vw,32px)", fontWeight: 700, color }}>{val}</div>
@@ -525,7 +639,7 @@ function AdminDashboard({ onLogout }) {
 
         {/* Tabs */}
         <div style={{ display: "flex", gap: 4, marginBottom: 18, background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.07)", borderRadius: 12, padding: 4, width: "fit-content", flexWrap: "wrap" }}>
-          {[["scores", "📊 คะแนน"], ["members", "👤 Members"], ["accounts", "👥 จัดการสมาชิก"]].map(([t, l]) => (
+          {[["scores", "📊 คะแนน"], ["accounts", "👥 จัดการสมาชิก"]].map(([t, l]) => (
             <button key={t} className="btn" onClick={() => setTab(t)} style={{ padding: "9px clamp(12px,2vw,20px)", borderRadius: 9, background: tab === t ? "rgba(96,165,250,.15)" : "transparent", color: tab === t ? "#93c5fd" : "#475569", fontFamily: "'Noto Sans Thai',serif", fontSize: "clamp(11px,2vw,13px)", fontWeight: tab === t ? 700 : 400, border: tab === t ? "1px solid rgba(96,165,250,.25)" : "1px solid transparent", transform: "none", minHeight: 36 }}>
               {l}
             </button>
@@ -587,35 +701,6 @@ function AdminDashboard({ onLogout }) {
           </div>
         )}
 
-        {/* ── MEMBERS TAB ── */}
-        {tab === "members" && (
-          <div className="fi" style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            {members.length === 0 ? (
-              <div style={{ background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.07)", borderRadius: 14, padding: 60, textAlign: "center" }}>
-                <p style={{ color: "#475569", fontSize: 15 }}>ยังไม่มีข้อมูล Member</p>
-                <p style={{ color: "#334155", fontSize: 13, marginTop: 6 }}>Member จะปรากฏที่นี่หลังจาก Import Score</p>
-              </div>
-            ) : members.map(m => {
-              const best = m.scores.length ? Math.max(...m.scores.map(s => s.pct)) : null;
-              const avg = m.scores.length ? Math.round(m.scores.reduce((s, r) => s + r.pct, 0) / m.scores.length) : null;
-              const pc = best >= 80 ? "#34d399" : best >= 60 ? "#fbbf24" : "#f87171";
-              return (
-                <div key={m.id} className="trow" onClick={() => setSelected({ _isMember: true, ...m })} style={{ background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.07)", borderRadius: 12, padding: "16px 18px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: 15, color: "#e2e8f0", fontWeight: 700 }}>{m.name}</div>
-                    <div style={{ fontSize: 11, color: "#334155", marginTop: 3 }}>ID: <span style={{ fontFamily: "monospace", color: "#475569" }}>{m.id}</span> · ทำแล้ว {m.scores.length} ครั้ง</div>
-                  </div>
-                  <div style={{ textAlign: "right", flexShrink: 0 }}>
-                    <div style={{ fontFamily: "'Crimson Pro',serif", fontSize: 26, fontWeight: 700, color: pc }}>{best}%</div>
-                    <div style={{ fontSize: 10, color: "#334155" }}>สูงสุด · เฉลี่ย {avg}%</div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-
-
         {/* ── ACCOUNTS TAB ── */}
         {tab === "accounts" && (
           <div className="fi">
@@ -664,16 +749,35 @@ function AdminDashboard({ onLogout }) {
                 </div>
               ) : (
                 <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                  {acctList.map(acc => (
-                    <div key={acc.id} style={{ background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.07)", borderRadius: 12, padding: "14px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontSize: 14, color: "#e2e8f0", fontWeight: 700 }}>{acc.name}</div>
-                        <div style={{ fontSize: 11, color: "#334155", marginTop: 2 }}>ID: <span style={{ fontFamily: "monospace", color: "#475569" }}>{acc.id}</span></div>
-                        <div style={{ fontSize: 10, color: "#1e293b", marginTop: 2 }}>สร้างเมื่อ {new Date(acc.createdAt).toLocaleDateString("th-TH", { day: "2-digit", month: "short", year: "2-digit" })}</div>
+                  {acctList.map(acc => {
+                    const accScores = scores.filter(s => s.id === acc.id);
+                    const times = accScores.length;
+                    const best = times ? Math.max(...accScores.map(s => s.pct)) : 0;
+                    const avg = times ? Math.round(accScores.reduce((sum, s) => sum + s.pct, 0) / times) : 0;
+                    const pc = best >= 80 ? "#34d399" : best >= 60 ? "#fbbf24" : "#f87171";
+
+                    return (
+                      <div key={acc.id} className="trow" onClick={() => times > 0 ? setSelected({ _isMember: true, id: acc.id, name: acc.name, scores: accScores }) : null} style={{ background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.07)", borderRadius: 12, padding: "14px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
+                        <div style={{ flex: 1, minWidth: 0, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                          <div>
+                            <div style={{ fontSize: 15, color: "#e2e8f0", fontWeight: 700 }}>{acc.name}</div>
+                            <div style={{ fontSize: 11, color: "#334155", marginTop: 2 }}>ID: <span style={{ fontFamily: "monospace", color: "#475569" }}>{acc.id}</span><span style={{ margin: "0 6px", color: "#1e293b" }}>|</span><span style={{ fontSize: 10, color: "#475569" }}>สร้าง: {new Date(acc.createdAt).toLocaleDateString("th-TH", { day: "2-digit", month: "short", year: "2-digit" })}</span></div>
+                          </div>
+                          {times > 0 ? (
+                            <div style={{ textAlign: "right", marginRight: 16 }}>
+                              <div style={{ fontFamily: "'Crimson Pro',serif", fontSize: 22, fontWeight: 700, color: pc, lineHeight: 1 }}>{best}%</div>
+                              <div style={{ fontSize: 10, color: "#334155", marginTop: 2 }}>สูงสุด ({times} ครั้ง)</div>
+                            </div>
+                          ) : (
+                            <div style={{ textAlign: "right", marginRight: 16, color: "#475569", fontSize: 11, fontStyle: "italic" }}>
+                              ยังไม่มีคะแนน
+                            </div>
+                          )}
+                        </div>
+                        <button className="btn" onClick={(e) => { e.stopPropagation(); setAcctDelConfirm(acc); }} style={{ padding: "6px 12px", borderRadius: 8, background: "rgba(248,113,113,.08)", border: "1px solid rgba(248,113,113,.2)", color: "#f87171", fontSize: 12, fontWeight: 600, fontFamily: "'Noto Sans Thai',serif", transform: "none", minHeight: 32 }}>ลบ</button>
                       </div>
-                      <button className="btn" onClick={() => setAcctDelConfirm(acc)} style={{ padding: "6px 12px", borderRadius: 8, background: "rgba(248,113,113,.08)", border: "1px solid rgba(248,113,113,.2)", color: "#f87171", fontSize: 12, fontWeight: 600, fontFamily: "'Noto Sans Thai',serif", transform: "none", minHeight: 32 }}>ลบ</button>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </div>
@@ -769,27 +873,21 @@ function AdminDashboard({ onLogout }) {
 // ═══════════════════════════════════════════════════════════════════════════════
 //  MEMBER HOME
 // ═══════════════════════════════════════════════════════════════════════════════
-function MemberHome({ user, onStart, onLogout, myScores, generating, apiKey, onApiKeyChange }) {
+function MemberHome({ user, onStart, onLogout, myScores, generating }) {
   const { isMobile } = useBreakpoint();
-  const [showKey, setShowKey] = useState(false);
 
   // Loading overlay while AI generates questions
   if (generating) {
     return (
-      <div style={{ minHeight: "100dvh", background: "#0c1018", fontFamily: "'Noto Sans Thai','Crimson Pro',serif", color: "white", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div style={{ minHeight: "100dvh", background: "var(--bg-dark)", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <style>{CSS}</style>
-        <div className="fu" style={{ textAlign: "center", maxWidth: 400, padding: 40 }}>
-          <div style={{ width: 80, height: 80, borderRadius: 24, background: "linear-gradient(135deg,rgba(96,165,250,.18),rgba(168,85,247,.18))", border: "1px solid rgba(96,165,250,.28)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 36, margin: "0 auto 24px", animation: "pulse 2s ease infinite" }}>🤖</div>
-          <h2 style={{ fontFamily: "'Crimson Pro',serif", fontSize: "clamp(20px,5vw,26px)", fontWeight: 700, color: "#e2e8f0", marginBottom: 10 }}>AI กำลังสร้างคำถาม...</h2>
-          <p style={{ color: "#475569", fontSize: 14, lineHeight: 1.7, marginBottom: 20 }}>กำลังสร้างคำถามใหม่ 50 ข้อ<br />โปรดรอสักครู่</p>
-          <div style={{ display: "flex", justifyContent: "center", gap: 6 }}>
+        <div className="fu" style={{ textAlign: "center", maxWidth: 400, padding: 40, animation: "floatY 4s ease-in-out infinite" }}>
+          <div style={{ width: 88, height: 88, borderRadius: 28, background: "linear-gradient(135deg,rgba(59,130,246,.2),rgba(168,85,247,.2))", border: "1px solid rgba(59,130,246,.3)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 40, margin: "0 auto 28px", animation: "pulseGlow 2s ease-in-out infinite" }}>🤖</div>
+          <h2 className="gradient-text" style={{ fontSize: "clamp(22px,5vw,28px)", fontWeight: 800, marginBottom: 12 }}>AI กำลังสร้างคำถาม...</h2>
+          <p style={{ color: "var(--text-muted)", fontSize: 15, lineHeight: 1.7, marginBottom: 28 }}>กำลังสร้างคำถามใหม่ 50 ข้อ<br />โปรดรอสักครู่</p>
+          <div style={{ display: "flex", justifyContent: "center", gap: 8 }}>
             {[0, 1, 2].map(i => (
-              <div key={i} style={{ width: 10, height: 10, borderRadius: "50%", background: "#3b82f6", animation: `pulse 1.2s ease ${i * 0.2}s infinite` }} />
-            ))}
-          </div>
-          <div style={{ marginTop: 24, display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
-            {Object.entries(TC).map(([topic, cfg]) => (
-              <span key={topic} style={{ fontSize: 11, padding: "4px 10px", borderRadius: 6, background: cfg.bg, border: `1px solid ${cfg.bd}`, color: cfg.c, fontWeight: 700 }}>{cfg.icon} {topic}</span>
+              <div key={i} style={{ width: 12, height: 12, borderRadius: "50%", background: "var(--primary)", animation: `pulse 1.2s ease ${i * 0.2}s infinite` }} />
             ))}
           </div>
         </div>
@@ -798,57 +896,39 @@ function MemberHome({ user, onStart, onLogout, myScores, generating, apiKey, onA
   }
 
   return (
-    <div style={{ minHeight: "100dvh", background: "#0c1018", fontFamily: "'Noto Sans Thai','Crimson Pro',serif", color: "white" }}>
+    <div style={{ minHeight: "100dvh", background: "var(--bg-dark)", color: "white" }}>
       <style>{CSS}</style>
-      <div style={{ borderBottom: "1px solid rgba(255,255,255,.06)", padding: "0 clamp(14px,4vw,32px)", display: "flex", alignItems: "center", justifyContent: "space-between", height: 56, background: "rgba(12,16,24,.95)", backdropFilter: "blur(12px)", position: "sticky", top: 0, zIndex: 10, gap: 12 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
-          <span style={{ fontSize: 16 }}>🔬</span>
-          <span style={{ fontFamily: "'Crimson Pro',serif", fontSize: "clamp(13px,3vw,17px)", fontWeight: 700, color: "#e2e8f0", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>Science Quiz</span>
+      <div style={{ borderBottom: "1px solid var(--glass-border)", padding: "0 clamp(16px,4vw,36px)", display: "flex", alignItems: "center", justifyContent: "space-between", height: 64, background: "rgba(7,9,14,.8)", backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)", position: "sticky", top: 0, zIndex: 10, gap: 12 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
+          <span style={{ fontSize: 18 }}>🔬</span>
+          <span className="serif gradient-text" style={{ fontSize: "clamp(15px,3vw,19px)", fontWeight: 800, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>Science Quiz</span>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
-          <span style={{ fontSize: 13, color: "#475569" }}>สวัสดี, <span style={{ color: "#93c5fd", fontWeight: 600 }}>{user.name}</span></span>
-          <button className="btn" onClick={onLogout} style={{ padding: "6px 12px", borderRadius: 8, background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.09)", color: "#475569", fontSize: 12, fontFamily: "'Noto Sans Thai',serif", transform: "none" }}>ออก</button>
+        <div style={{ display: "flex", alignItems: "center", gap: 16, flexShrink: 0 }}>
+          <span style={{ fontSize: 14, color: "var(--text-muted)" }}>สวัสดี <span style={{ color: "#e2e8f0", fontWeight: 700 }}>{user.name}</span></span>
+          <button className="btn" onClick={onLogout} style={{ padding: "8px 16px", borderRadius: 10, background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.1)", color: "var(--text-muted)", fontSize: 13, height: 36 }}>ออกระบบ</button>
         </div>
       </div>
-      <div style={{ maxWidth: 700, margin: "0 auto", padding: "clamp(20px,4vw,40px) clamp(14px,4vw,32px)" }}>
-        {/* Hero */}
-        <div className="fu" style={{ background: "rgba(255,255,255,.025)", border: "1px solid rgba(255,255,255,.07)", borderRadius: 20, padding: "clamp(24px,5vw,40px)", marginBottom: 24, textAlign: "center" }}>
-          <div style={{ fontFamily: "'Crimson Pro',serif", fontSize: "clamp(28px,6vw,40px)", fontWeight: 700, lineHeight: 1.2, marginBottom: 12 }}>
-            <span style={{ background: "linear-gradient(135deg,#e2e8f0,#94a3b8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>พร้อมสอบ</span>
-          </div>
-          <p style={{ color: "#334155", fontSize: "clamp(13px,2.5vw,15px)", marginBottom: 8 }}>🤖 AI สร้างคำถามใหม่ 50 ข้อทุกครั้ง · จับเวลา 30 วินาที/ข้อ</p>
-          <p style={{ color: "#1e293b", fontSize: 11, marginBottom: 16 }}>Powered by Google Gemini AI (ฟรี!)</p>
 
-          {/* Gemini API Key Input */}
-          <div style={{ background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.08)", borderRadius: 14, padding: "16px 18px", marginBottom: 20, textAlign: "left" }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
-              <label style={{ fontSize: 10, color: "#475569", fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase" }}>🔑 Gemini API Key</label>
-              {apiKey && <span style={{ fontSize: 9, padding: "2px 8px", borderRadius: 5, background: "rgba(52,211,153,.1)", border: "1px solid rgba(52,211,153,.25)", color: "#34d399", fontWeight: 700 }}>✓ พร้อมใช้งาน</span>}
-            </div>
-            <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-              <input
-                type={showKey ? "text" : "password"}
-                value={apiKey}
-                onChange={e => onApiKeyChange(e.target.value)}
-                placeholder="วาง Gemini API Key ที่นี่..."
-                style={{ flex: 1, padding: "10px 14px", borderRadius: 10, background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.1)", color: "white", fontSize: 12, fontFamily: "monospace" }}
-              />
-              <button className="btn" onClick={() => setShowKey(p => !p)} style={{ padding: "8px 10px", borderRadius: 8, background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.1)", color: "#475569", fontSize: 12, minHeight: 36, transform: "none" }}>{showKey ? "🙈" : "👁️"}</button>
-            </div>
-            {!apiKey && <p style={{ fontSize: 11, color: "#334155", marginTop: 8, lineHeight: 1.6 }}>ฟรี! รับ Key ที่ <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style={{ color: "#60a5fa", textDecoration: "underline" }}>aistudio.google.com/apikey</a></p>}
-            {!apiKey && <p style={{ fontSize: 10, color: "#1e293b", marginTop: 4 }}>ถ้าไม่มี Key จะใช้คำถามสำเร็จรูปแทน</p>}
-          </div>
+      <div style={{ maxWidth: 760, margin: "0 auto", padding: "clamp(24px,5vw,48px) clamp(16px,4vw,32px)" }}>
+        {/* Hero Section */}
+        <div className="glass-panel fu delay-1" style={{ padding: "clamp(32px,6vw,48px)", marginBottom: 32, textAlign: "center", position: "relative", overflow: "hidden" }}>
+          <div style={{ position: "absolute", top: "-50%", left: "-20%", width: "140%", height: "200%", background: "radial-gradient(circle at 50% 100%, rgba(59,130,246,0.08) 0%, transparent 50%)", pointerEvents: "none" }} />
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 10, marginBottom: 28 }}>
+          <h1 className="gradient-text serif" style={{ fontSize: "clamp(32px,7vw,48px)", fontWeight: 800, lineHeight: 1.1, marginBottom: 16 }}>พร้อมสอบหรือยัง?</h1>
+          <p style={{ color: "#cbd5e1", fontSize: "clamp(14px,3vw,16px)", marginBottom: 10, fontWeight: 500 }}>🤖 AI สร้างคำถามใหม่ 50 ข้อทุกครั้ง · จับเวลา 30 วินาที/ข้อ</p>
+          <p style={{ color: "var(--text-dim)", fontSize: 12, marginBottom: 32, letterSpacing: "0.05em" }}>POWERED BY GOOGLE GEMINI AI</p>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 12, marginBottom: 36 }}>
             {Object.entries(TC).map(([topic, cfg]) => (
-              <div key={topic} style={{ background: cfg.bg, border: `1px solid ${cfg.bd}`, borderRadius: 12, padding: "14px 10px" }}>
-                <div style={{ fontSize: 22, marginBottom: 4 }}>{cfg.icon}</div>
-                <div style={{ fontSize: 12, color: cfg.c, fontWeight: 700 }}>{topic}</div>
+              <div key={topic} className="si" style={{ background: `linear-gradient(135deg, ${cfg.bg}, rgba(255,255,255,0.02))`, border: `1px solid ${cfg.bd}`, borderRadius: 16, padding: "18px 10px", transition: "transform 0.3s ease", cursor: "default" }}>
+                <div style={{ fontSize: 26, marginBottom: 8, filter: "drop-shadow(0 4px 6px rgba(0,0,0,0.2))" }}>{cfg.icon}</div>
+                <div style={{ fontSize: 13, color: cfg.c, fontWeight: 700, letterSpacing: "0.02em" }}>{topic}</div>
               </div>
             ))}
           </div>
-          <button className="btn" onClick={onStart} style={{ padding: "14px 40px", borderRadius: 14, background: apiKey ? "linear-gradient(135deg,#3b82f6,#1d4ed8)" : "linear-gradient(135deg,#475569,#334155)", color: "white", fontSize: 16, fontWeight: 700, fontFamily: "'Noto Sans Thai',serif", transform: "none" }}>
-            {apiKey ? "🤖 เริ่มทำข้อสอบ (AI) →" : "📝 เริ่มทำข้อสอบ →"}
+
+          <button className="btn btn-primary" onClick={onStart} style={{ padding: "18px 48px", borderRadius: 18, fontSize: 18, width: isMobile ? "100%" : "auto" }}>
+            🤖 เริ่มทำข้อสอบ →
           </button>
         </div>
         {/* History */}
@@ -875,7 +955,7 @@ function MemberHome({ user, onStart, onLogout, myScores, generating, apiKey, onA
           </div>
         )}
       </div>
-    </div>
+    </div >
   );
 }
 
@@ -1162,11 +1242,6 @@ export default function App() {
   });
   const unsubRef = useRef(null);
 
-  const handleApiKeyChange = (key) => {
-    setGeminiKey(key);
-    try { localStorage.setItem("sq_gemini_key", key); } catch { }
-  };
-
   // Subscribe to member's scores from Firebase when logged in
   useEffect(() => {
     if (user?.role === "member") {
@@ -1221,5 +1296,5 @@ export default function App() {
   if (user.role === "admin") return <AdminDashboard onLogout={handleLogout} />;
   if (view === "quiz" && !generating) return <QuizScreen user={user} questions={questions} onFinish={handleFinish} />;
   if (view === "results") return <ResultsScreen user={user} questions={questions} answers={answers} onRetry={handleStart} onHome={() => setView("home")} />;
-  return <MemberHome user={user} onStart={handleStart} onLogout={handleLogout} myScores={myScores} generating={generating} apiKey={geminiKey} onApiKeyChange={handleApiKeyChange} />;
+  return <MemberHome user={user} onStart={handleStart} onLogout={handleLogout} myScores={myScores} generating={generating} />;
 }
